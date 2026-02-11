@@ -13,16 +13,17 @@ class Node:
 
 class Dictionary:
     def __init__(
-            self, initial_capacity: int = 8,
+            self,
+            initial_capacity: int = 8,
             load_factor: float = 0.75
     ) -> None:
         self.capacity: int = initial_capacity
         self.load_factor: float = load_factor
-        self.size: int = 0
+        self.length: int = 0
         self.table: List[Optional[Node]] = [None] * self.capacity
 
     def __len__(self) -> int:
-        return self.size
+        return self.length
 
     def _index(self, key_hash: int) -> int:
         return key_hash % self.capacity
@@ -31,7 +32,7 @@ class Dictionary:
         old_table: List[Optional[Node]] = self.table
         self.capacity *= 2
         self.table = [None] * self.capacity
-        self.size = 0
+        self.length = 0
 
         for node in old_table:
             if node is not None:
@@ -46,7 +47,7 @@ class Dictionary:
 
             if node is None:
                 self.table[index] = Node(key, value)
-                self.size += 1
+                self.length += 1
                 break
 
             if node.key == key:
@@ -55,7 +56,7 @@ class Dictionary:
 
             index = (index + 1) % self.capacity
 
-        if self.size / self.capacity > self.load_factor:
+        if self.length / self.capacity > self.load_factor:
             self._resize()
 
     def __getitem__(self, key: Any) -> Any:
